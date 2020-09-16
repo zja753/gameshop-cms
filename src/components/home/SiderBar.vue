@@ -10,25 +10,23 @@
           text-color="#fff"
           active-text-color="#e84393"
         >
-          <!-- <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-user"></i>
-              <span>用户管理</span>
-            </template>
-          </el-submenu>-->
           <el-menu-item index="1">
             <i class="el-icon-collection-tag"></i>
             <span slot="title">用户管理</span>
           </el-menu-item>
           <el-menu-item index="2">
+            <i class="el-icon-menu"></i>
+            <span slot="title">游戏组管理</span>
+          </el-menu-item>
+          <el-menu-item index="3">
             <i class="el-icon-s-promotion"></i>
             <span slot="title">游戏管理</span>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="4">
             <i class="el-icon-document"></i>
             <span slot="title">订单管理</span>
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="5">
             <i class="el-icon-collection-tag"></i>
             <span slot="title">标签管理</span>
           </el-menu-item>
@@ -58,9 +56,10 @@ export default {
     handleSelect(key) {
       // console.log(key, keyPath);
       if (key == 1) this.$router.push("/home/usermanage");
-      if (key == 2) this.$router.push("/home/productmanage");
-      if (key == 3) this.$router.push("/home/ordermanage");
-      if (key == 4) this.$router.push("/home/tagmanage");
+      if (key == 2) this.$router.push("/home/groupmanage");
+      if (key == 3) this.$router.push("/home/productmanage");
+      if (key == 4) this.$router.push("/home/ordermanage");
+      if (key == 5) this.$router.push("/home/tagmanage");
     },
   },
 };

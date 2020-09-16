@@ -13,6 +13,9 @@ const routes = [{
     path: '/home/tagmanage',
     component: () => import('../views/tag/TagManage')
   }, {
+    path: '/home/groupmanage',
+    component: () => import('../views/group/GroupManage')
+  }, {
     path: '/home/productmanage',
     component: () => import('../views/product/ProductManage')
   }, {
