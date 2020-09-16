@@ -7,8 +7,8 @@
         :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%"
       >
-        <el-table-column label="用户昵称" prop="nickname"></el-table-column>
-        <el-table-column label="账号" prop="account"></el-table-column>
+        <el-table-column label="用户昵称" prop="nickName"></el-table-column>
+        <el-table-column label="账号" prop="email"></el-table-column>
         <el-table-column label="用户余额" prop="balance"></el-table-column>
 
         <el-table-column align="right">
@@ -20,7 +20,7 @@
           </template>
           <template slot-scope="scope">
             <el-button size="mini" type="primary">编辑</el-button>
-            <el-button size="mini" type="info">用户详情</el-button>
+            <el-button size="mini" type="info" @click="checkDetail(scope.$index, scope.row)">用户详情</el-button>
             <el-button size="mini" type="success">查看订单</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
@@ -34,41 +34,44 @@ export default {
   name: "UserManage",
   data() {
     return {
-      tableData: [
-        {
-          account: "2016-05-02",
-          nickname: "王小虎",
-          balance: 111,
-        },
-        {
-          account: "2016-05-02",
-          nickname: "王小虎",
-          balance: 111,
-        },
-        {
-          account: "2016-05-02",
-          nickname: "王小虎",
-          balance: 111,
-        },
-        {
-          account: "2016-05-02",
-          nickname: "王小虎",
-          balance: 111,
-        },
-      ],
+      tableData: [],
       search: "",
+      addBoxVisible: false,
+      addBtnLoding: false,
     };
+  },
+  created() {},
+  mounted() {
+    this.fetchAll();
   },
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(index) {
+      // console.log(index);
+      this.$axios
+        .post("/user/delete", { _id: this.tableData[index]._id })
+        .then((res) => {
+          // console.log(res);
+          if (res.status == 1) {
+            this.$message({
+              type: "success",
+              message: "删除数据成功",
+            });
+          }
+          this.fetchAll();
+        });
     },
-    // handleEdit() {
-    //   // this.$router.push("/");
-    // },
+    checkDetail(index) {
+      this.$router.push("/home/userdetail/" + this.tableData[index]._id);
+    },
+    fetchAll() {
+      this.$axios.get("/user/fetch").then((res) => {
+        this.tableData = res.data;
+        console.log(this.tableData);
+      });
+    },
   },
 };
 </script>

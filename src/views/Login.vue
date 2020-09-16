@@ -4,9 +4,21 @@
       <div class="left-part">
         <div class="content">
           <h2>登 录</h2>
-          <input type="text" name="username" placeholder="请输入用户名" />
-          <input type="password" name="password" placeholder="请输入密码" />
-          <button type="submit">登录</button>
+          <input
+            @keyup="params.email=params.email.replace(/\s+/g,'')"
+            v-model="params.email"
+            type="text"
+            name="username"
+            placeholder="请输入用户名"
+          />
+          <input
+            @keyup="params.password=params.password.replace(/\s+/g,'')"
+            v-model="params.password"
+            type="password"
+            name="password"
+            placeholder="请输入密码"
+          />
+          <button type="submit" :plain="true" @click="handleLogin">登录</button>
         </div>
       </div>
       <div class="right-part">
@@ -31,9 +43,18 @@ export default {
         backgroundPosition: "center",
       },
       scrollReveal: scrollReveal(),
+      account: "",
+      params: {
+        email: "",
+        password: "",
+      },
     };
   },
-
+  watch: {
+    // email(n) {
+    //   console.log(n);
+    // },
+  },
   created() {},
   mounted() {
     this.scrollReveal.reveal(".form_login", {
@@ -55,7 +76,33 @@ export default {
       scale: 0.9,
     });
   },
-  methods: {},
+  methods: {
+    handleLogin() {
+      let re = /\w+@[a-z0-9]+\.[a-z]{2,4}/;
+      if (!re.test(this.params.email)) {
+        this.$message({
+          message: "请输入正确的邮箱!!!",
+          type: "warning",
+        });
+        return;
+      }
+      if (this.params.password.length < 6) {
+        this.$message({
+          message: "密码不得小于6位",
+          type: "warning",
+        });
+      }
+
+      this.$axios.post("/user/login", this.params).then((res) => {
+        res.data.Authorization = res.data.token;
+        res.data.account = res.data.email;
+        if (res.msg == "登录成功") {
+          this.$store.commit("changeLogin", res.data);
+          this.$router.push("/home");
+        }
+      });
+    },
+  },
 };
 </script>
 
