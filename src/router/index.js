@@ -19,6 +19,9 @@ const routes = [{
     path: '/home/productmanage',
     component: () => import('../views/product/ProductManage')
   }, {
+    path: '/home/addproduct',
+    component: () => import('../views/product/AddProduct')
+  }, {
     path: '/home/ordermanage',
     component: () => import('../views/order/OrderManage')
   }, {
