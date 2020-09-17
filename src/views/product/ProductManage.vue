@@ -47,10 +47,40 @@ export default {
       });
     },
     editTargetGroup(id) {
-      console.log(id);
+      this.$router.push(`./EditProduct/${id}`);
     },
     deleteTargetGroup(id) {
-      console.log(id);
+      this.$confirm("是否删除该条数据???", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$axios
+            .post("/product/delete", {
+              _id: id,
+            })
+            .then((res) => {
+              if (res.status === 1) {
+                this.fetchProductList();
+                this.$message({
+                  message: res.msg,
+                  type: "success",
+                });
+              } else {
+                this.$message({
+                  message: res.err,
+                  type: "warning",
+                });
+              }
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     toAddPage() {
       this.$router.push("./addproduct");

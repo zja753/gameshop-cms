@@ -18,6 +18,7 @@ export default {
       params: {
         email: "",
         password: "",
+        role:'admin'
       },
     };
   },

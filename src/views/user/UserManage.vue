@@ -40,10 +40,6 @@ export default {
       addBtnLoding: false,
     };
   },
-  created() {},
-  mounted() {
-    this.fetchAll();
-  },
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
@@ -80,10 +76,16 @@ export default {
     },
     fetchAll() {
       this.$axios.get("/user/fetch").then((res) => {
-        this.tableData = res.data;
+        this.tableData = res.data.filter((item) => {
+          return item.role !== "admin";
+        });
         console.log(this.tableData);
       });
     },
+  },
+  created() {},
+  mounted() {
+    this.fetchAll();
   },
 };
 </script>

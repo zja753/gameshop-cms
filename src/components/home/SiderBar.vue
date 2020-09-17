@@ -46,20 +46,29 @@ export default {
   },
   mounted() {},
   methods: {
-    // handleOpen(key, keyPath) {
-    //   // console.log(key, keyPath);
-    //   // console.log(233);
-    // },
-    // handleClose(key, keyPath) {
-    //   // console.log(key, keyPath);
-    // },
     handleSelect(key) {
-      // console.log(key, keyPath);
-      if (key == 1) this.$router.push("/home/usermanage");
-      if (key == 2) this.$router.push("/home/groupmanage");
-      if (key == 3) this.$router.push("/home/productmanage");
-      if (key == 4) this.$router.push("/home/ordermanage");
-      if (key == 5) this.$router.push("/home/tagmanage");
+      switch (key) {
+        case "1":
+          this.to("/home/usermanage");
+          break;
+        case "2":
+          this.to("/home/groupmanage");
+          break;
+        case "3":
+          this.to("/home/productmanage");
+          break;
+        case "4":
+          this.to("/home/ordermanage");
+          break;
+        case "5":
+          this.to("/home/tagmanage");
+          break;
+      }
+    },
+    to(path) {
+      if (path !== this.$route.path) {
+        this.$router.push(path);
+      }
     },
   },
 };

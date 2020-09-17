@@ -22,6 +22,9 @@ const routes = [{
     path: '/home/addproduct',
     component: () => import('../views/product/AddProduct')
   }, {
+    path: '/home/editproduct/:id',
+    component: () => import('../views/product/EditProduct')
+  }, {
     path: '/home/ordermanage',
     component: () => import('../views/order/OrderManage')
   }, {

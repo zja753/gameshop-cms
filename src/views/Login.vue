@@ -13,6 +13,7 @@
           />
           <input
             @keyup="params.password=params.password.replace(/\s+/g,'')"
+            @keyup.enter="handleLogin"
             v-model="params.password"
             type="password"
             name="password"

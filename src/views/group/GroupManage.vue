@@ -232,7 +232,18 @@ export default {
               _id: id,
             })
             .then((res) => {
-              console.log(res);
+              this.fetchGroupList()
+              if (res.status === 1) {
+                this.$message({
+                  message: res.msg,
+                  type: "success",
+                });
+              } else {
+                this.$message({
+                  message: res.err,
+                  type: "warning",
+                });
+              }
             });
           this.fetchGroupList();
         })
