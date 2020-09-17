@@ -26,21 +26,19 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
   .main {
-    flex: 1;
+    // flex: 1;
+    height: calc(100vh - 66px);
     display: flex;
 
     .siderbar {
       width: 200px;
-      border: 1px solid red;
-      overflow-x: hidden;
-      overflow-y: auto;
     }
     .content {
       flex: 1;
-      border: 1px solid red;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: auto;
     }
   }
 }

@@ -94,11 +94,16 @@ export default {
       }
 
       this.$axios.post("/user/login", this.params).then((res) => {
-        res.data.Authorization = res.data.token;
-        res.data.account = res.data.email;
-        if (res.msg == "登录成功") {
+        if (res.status == 1) {
+          res.data.Authorization = res.data.token;
+          res.data.account = res.data.email;
           this.$store.commit("changeLogin", res.data);
           this.$router.push("/home");
+        } else {
+          this.$message({
+            message: res.err,
+            type: "warning",
+          });
         }
       });
     },

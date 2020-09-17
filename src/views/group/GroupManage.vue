@@ -27,7 +27,13 @@
     </el-table>
     <el-button class="addBtn" type="primary" icon="el-icon-plus" circle @click="addBoxVisible=true"></el-button>
 
-    <el-dialog title="添加组" :visible.sync="addBoxVisible" width="30%" :before-close="addBoxClose">
+    <el-dialog
+      title="添加组"
+      :visible.sync="addBoxVisible"
+      width="30%"
+      :close-on-click-modal="false"
+      :before-close="addBoxClose"
+    >
       <el-form class="form" ref="form" :model="addGroup" label-width="80px">
         <el-form-item label="组名称">
           <el-input v-model="addGroup.name"></el-input>
@@ -51,7 +57,13 @@
         <el-button type="primary" @click="addingGroup" :loading="addBtnLoding">添 加</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="编辑组" :visible.sync="editBoxVisible" width="30%" :before-close="addBoxClose">
+    <el-dialog
+      title="编辑组"
+      :visible.sync="editBoxVisible"
+      width="30%"
+      :close-on-click-modal="false"
+      :before-close="addBoxClose"
+    >
       <el-form class="form" ref="form" :model="editGroup" label-width="80px">
         <el-form-item label="组名称">
           <el-input v-model="editGroup.name"></el-input>
@@ -209,14 +221,27 @@ export default {
       });
     },
     deleteTargetGroup(id) {
-      this.$axios
-        .post("/group/delete", {
-          _id: id,
+      this.$confirm("是否删除该条数据???", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$axios
+            .post("/group/delete", {
+              _id: id,
+            })
+            .then((res) => {
+              console.log(res);
+            });
+          this.fetchGroupList();
         })
-        .then((res) => {
-          console.log(res);
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
-      this.fetchGroupList();
     },
   },
   mounted() {

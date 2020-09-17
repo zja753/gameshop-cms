@@ -1,7 +1,7 @@
 <template>
   <div class="tagManageBox">
     <div class="operation"></div>
-    <el-table :data="tagList" height="800" border style="width: 100%">
+    <el-table :data="tagList" height="2800" border style="width: 100%">
       <el-table-column prop="name" label="标签名" width="180"></el-table-column>
       <el-table-column prop="introduction" label="介绍"></el-table-column>
       <el-table-column label="操作" width="200">
@@ -15,7 +15,13 @@
     </el-table>
     <el-button class="addBtn" type="primary" icon="el-icon-plus" circle @click="addBoxVisible=true"></el-button>
 
-    <el-dialog title="添加标签" :visible.sync="addBoxVisible" width="30%" :before-close="addBoxClose">
+    <el-dialog
+      title="添加标签"
+      :visible.sync="addBoxVisible"
+      width="30%"
+      :close-on-click-modal="false"
+      :before-close="addBoxClose"
+    >
       <el-form class="form" ref="form" :model="addTag" label-width="80px">
         <el-form-item label="标签名称">
           <el-input v-model="addTag.name"></el-input>
@@ -27,6 +33,27 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addBoxVisible = false">取 消</el-button>
         <el-button type="primary" @click="addingTag" :loading="addBtnLoding">添 加</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="编辑标签"
+      :visible.sync="editBoxVisible"
+      width="30%"
+      :close-on-click-modal="false"
+      :before-close="addBoxClose"
+    >
+      <el-form class="form" ref="form" :model="editTag" label-width="80px">
+        <el-form-item label="组名称">
+          <el-input v-model="editTag.name"></el-input>
+        </el-form-item>
+        <el-form-item label="介绍">
+          <el-input v-model="editTag.introduction" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editBoxVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editingTag" :loading="editBtnLoding">修 改</el-button>
       </span>
     </el-dialog>
   </div>
@@ -44,6 +71,13 @@ export default {
       addBoxVisible: false,
       addTag: {},
       addBtnLoding: false,
+      editBoxVisible: false,
+      editBtnLoding: false,
+      editTag: {
+        id: "",
+        name: "",
+        introduction: "",
+      },
     };
   },
   methods: {
@@ -98,10 +132,78 @@ export default {
       }
     },
     editTargetTag(id) {
-      console.log(id);
+      this.editBoxVisible = true;
+      this.editBtnLoding = true;
+      this.editTag.id = id;
+      this.$axios
+        .get("/tag/get", { _id: id })
+        .then((res) => {
+          this.editTag.name = res.data.name;
+          this.editTag.introduction = res.data.introduction;
+          this.editBtnLoding = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // console.log(id);
     },
     deleteTargetTag(id) {
-      console.log(id);
+      this.$confirm("是否删除该条数据???", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$axios.post("/tag/delete", { _id: id }).then((res) => {
+            if (res.status == 1) {
+              this.$message({
+                showClose: true,
+                message: "成功删除标签!!!",
+                type: "success",
+              });
+              this.fetchTagList();
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.err,
+                type: "warning",
+              });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    editingTag() {
+      this.editBtnLoding = true;
+      this.$axios
+        .post("/tag/update", {
+          _id: this.editTag.id,
+          introduction: this.editTag.introduction,
+          name: this.editTag.name,
+        })
+        .then((res) => {
+          if (res.status == 1) {
+            this.$message({
+              showClose: true,
+              message: "成功修改标签!!!",
+              type: "success",
+            });
+            this.fetchTagList();
+            this.editBoxVisible = false;
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.err,
+              type: "warning",
+            });
+          }
+        });
+      this.editBtnLoding = false;
     },
   },
   mounted() {
