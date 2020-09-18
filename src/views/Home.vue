@@ -39,6 +39,7 @@ export default {
     .content {
       flex: 1;
       overflow: auto;
+      background-color: #636e72;
     }
   }
 }

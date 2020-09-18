@@ -1,7 +1,7 @@
 <template>
   <div class="groupManageBox">
     <div class="operation"></div>
-    <el-table :data="groupList" height="800" border style="width: 100%">
+    <el-table class="groupListTable" :data="groupList" height="800" border>
       <el-table-column prop="name" label="组名" width="180"></el-table-column>
       <el-table-column prop="introduction" label="介绍"></el-table-column>
       <el-table-column prop="click" label="点击数" width="180"></el-table-column>
@@ -232,7 +232,7 @@ export default {
               _id: id,
             })
             .then((res) => {
-              this.fetchGroupList()
+              this.fetchGroupList();
               if (res.status === 1) {
                 this.$message({
                   message: res.msg,
@@ -269,6 +269,10 @@ export default {
   padding: 20px;
   .operation {
     display: flex;
+  }
+  .groupListTable {
+    width: 100%;
+    border-radius: 10px;
   }
   .addBtn {
     position: fixed;

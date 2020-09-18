@@ -79,6 +79,9 @@ export default {
   background: #636e72;
   .tac {
     width: 100%;
+    .el-menu-vertical-demo {
+      border-right: none;
+    }
   }
 }
 </style>

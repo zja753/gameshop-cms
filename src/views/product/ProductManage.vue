@@ -1,7 +1,7 @@
 <template>
   <div class="productManageBox">
     <div class="operation"></div>
-    <el-table :data="productList" height="800" border style="width: 100%">
+    <el-table class="productListTable" :data="productList" height="800" border>
       <el-table-column prop="group_name" label="组名"></el-table-column>
       <el-table-column prop="name" label="游戏名" width="180"></el-table-column>
       <el-table-column prop="name_en" label="英文名"></el-table-column>
@@ -95,8 +95,13 @@ export default {
 <style lang='scss'>
 .productManageBox {
   padding: 20px;
+
   .operation {
     display: flex;
+  }
+  .productListTable{
+    width: 100%;
+    border-radius: 10px;
   }
   .addBtn {
     position: fixed;

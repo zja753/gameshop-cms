@@ -1,7 +1,7 @@
 <template>
   <div class="tagManageBox">
     <div class="operation"></div>
-    <el-table :data="tagList" height="2800" border style="width: 100%">
+    <el-table class="tagListTable" :data="tagList" height="800" border>
       <el-table-column prop="name" label="标签名" width="180"></el-table-column>
       <el-table-column prop="introduction" label="介绍"></el-table-column>
       <el-table-column label="操作" width="200">
@@ -217,6 +217,10 @@ export default {
   padding: 20px;
   .operation {
     display: flex;
+  }
+  .tagListTable {
+    width: 100%;
+    border-radius: 10px;
   }
   .addBtn {
     position: fixed;
