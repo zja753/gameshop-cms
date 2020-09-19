@@ -3,7 +3,9 @@
     <Header />
     <div class="main">
       <SiderBar class="siderbar" />
-      <router-view class="content"></router-view>
+      <vue-scroll :ops="ops" style="width:100%;height:100%">
+        <router-view class="content"></router-view>
+      </vue-scroll>
     </div>
   </div>
 </template>
@@ -13,6 +15,24 @@ import SiderBar from "@/components/home/SiderBar";
 
 export default {
   name: "Home",
+  data() {
+    return {
+      ops: {
+        vuescroll: {},
+        scrollPanel: {},
+        rail: {
+          keepShow: true,
+        },
+        bar: {
+          hoverStyle: true,
+          onlyShowBarOnScroll: false, //是否只有滚动的时候才显示滚动条
+          background: "#F5F5F5", //滚动条颜色
+          opacity: 0.5, //滚动条透明度
+          "overflow-x": "hidden",
+        },
+      },
+    };
+  },
   components: {
     Header,
     SiderBar,
