@@ -4,16 +4,42 @@
     <el-table class="tagListTable" :data="tagList" height="800" border>
       <el-table-column prop="name" label="标签名" width="180"></el-table-column>
       <el-table-column prop="introduction" label="介绍"></el-table-column>
+      <el-table-column prop="type" label="介绍"></el-table-column>
       <el-table-column label="操作" width="200">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <el-button-group>
-            <el-button type="primary" icon="el-icon-edit" @click="editTargetTag(row._id)">编辑</el-button>
-            <el-button type="primary" icon="el-icon-delete" @click="deleteTargetTag(row._id)">删除</el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              @click="editTargetTag(row._id)"
+              >编辑</el-button
+            >
+            <el-button
+              type="primary"
+              icon="el-icon-delete"
+              @click="deleteTargetTag(row._id)"
+              >删除</el-button
+            >
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
-    <el-button class="addBtn" type="primary" icon="el-icon-plus" circle @click="addBoxVisible=true"></el-button>
+    <el-pagination
+      class="pagination"
+      background
+      layout="prev, pager, next, jumper"
+      :total="totle"
+      :page-size="pagination.limit"
+      @current-change="toCurrentPage"
+    >
+    </el-pagination>
+    <el-button
+      class="addBtn"
+      type="primary"
+      icon="el-icon-plus"
+      circle
+      @click="addBoxVisible = true"
+    ></el-button>
 
     <el-dialog
       title="添加标签"
@@ -32,7 +58,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addingTag" :loading="addBtnLoding">添 加</el-button>
+        <el-button type="primary" @click="addingTag" :loading="addBtnLoding"
+          >添 加</el-button
+        >
       </span>
     </el-dialog>
 
@@ -53,7 +81,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editingTag" :loading="editBtnLoding">修 改</el-button>
+        <el-button type="primary" @click="editingTag" :loading="editBtnLoding"
+          >修 改</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -66,8 +96,9 @@ export default {
       tagList: [],
       pagination: {
         page: 0,
-        limit: 10,
+        limit: 20,
       },
+      totle: 0,
       addBoxVisible: false,
       addTag: {},
       addBtnLoding: false,
@@ -205,9 +236,17 @@ export default {
         });
       this.editBtnLoding = false;
     },
+    toCurrentPage(currentPage) {
+      this.pagination.page = currentPage - 1;
+      this.fetchTagList();
+      console.log(this.pagination);
+    },
   },
   mounted() {
     this.fetchTagList();
+    this.$axios.get("/tag/count").then((res) => {
+      this.totle = res.data;
+    });
   },
 };
 </script>
@@ -221,6 +260,13 @@ export default {
   .tagListTable {
     width: 100%;
     border-radius: 10px;
+  }
+  .pagination {
+    margin-top: 10px;
+
+    .el-pagination__jump {
+      color: white;
+    }
   }
   .addBtn {
     position: fixed;

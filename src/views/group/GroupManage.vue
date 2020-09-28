@@ -4,28 +4,58 @@
     <el-table class="groupListTable" :data="groupList" height="800" border>
       <el-table-column prop="name" label="组名" width="180"></el-table-column>
       <el-table-column prop="introduction" label="介绍"></el-table-column>
-      <el-table-column prop="click" label="点击数" width="180"></el-table-column>
+      <el-table-column
+        prop="click"
+        label="点击数"
+        width="180"
+      ></el-table-column>
       <el-table-column label="标签">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <el-tag
             v-for="tag in row.tags"
-            :key="tag+'-'+row.name"
+            :key="tag + '-' + row.name"
             type="danger"
             effect="plain"
-            style="margin-left:10px"
-          >{{ tag }}</el-tag>
+            style="margin-left: 10px"
+            >{{ tag }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <el-button-group>
-            <el-button type="primary" icon="el-icon-edit" @click="editTargetGroup(row._id)">编辑</el-button>
-            <el-button type="primary" icon="el-icon-delete" @click="deleteTargetGroup(row._id)">删除</el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              @click="editTargetGroup(row._id)"
+              >编辑</el-button
+            >
+            <el-button
+              type="primary"
+              icon="el-icon-delete"
+              @click="deleteTargetGroup(row._id)"
+              >删除</el-button
+            >
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
-    <el-button class="addBtn" type="primary" icon="el-icon-plus" circle @click="addBoxVisible=true"></el-button>
+    <el-pagination
+      class="pagination"
+      background
+      layout="prev, pager, next, jumper"
+      :total="totle"
+      :page-size="pagination.limit"
+      @current-change="toCurrentPage"
+    >
+    </el-pagination>
+    <el-button
+      class="addBtn"
+      type="primary"
+      icon="el-icon-plus"
+      circle
+      @click="addBoxVisible = true"
+    ></el-button>
 
     <el-dialog
       title="添加组"
@@ -54,7 +84,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addingGroup" :loading="addBtnLoding">添 加</el-button>
+        <el-button type="primary" @click="addingGroup" :loading="addBtnLoding"
+          >添 加</el-button
+        >
       </span>
     </el-dialog>
     <el-dialog
@@ -89,7 +121,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editingGroup" :loading="editBtnLoding">修 改</el-button>
+        <el-button type="primary" @click="editingGroup" :loading="editBtnLoding"
+          >修 改</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -102,8 +136,9 @@ export default {
       groupList: [],
       pagination: {
         page: 0,
-        limit: 10,
+        limit: 20,
       },
+      totle: 0,
       addBoxVisible: false,
       addGroup: {},
       addBtnLoding: false,
@@ -254,11 +289,19 @@ export default {
           });
         });
     },
+    toCurrentPage(currentPage) {
+      this.pagination.page = currentPage - 1;
+      this.fetchGroupList();
+      console.log(this.pagination);
+    },
   },
   mounted() {
     this.fetchGroupList();
     this.$axios.get("/tag/fetch", this.pagination).then((res) => {
       this.tagList = res.data;
+    });
+    this.$axios.get("/group/count").then((res) => {
+      this.totle = res.data;
     });
   },
 };
@@ -273,6 +316,13 @@ export default {
   .groupListTable {
     width: 100%;
     border-radius: 10px;
+  }
+  .pagination {
+    margin-top: 10px;
+
+    .el-pagination__jump {
+      color: white;
+    }
   }
   .addBtn {
     position: fixed;

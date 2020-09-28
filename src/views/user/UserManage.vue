@@ -1,32 +1,36 @@
 <template>
-  <div>
-    <h2>用户管理</h2>
-
-    <div class="content">
-      <el-table
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-        style="width: 100%"
-      >
-        <el-table-column label="用户昵称" prop="nickName"></el-table-column>
-        <el-table-column label="账号" prop="email"></el-table-column>
-        <el-table-column label="用户余额" prop="balance"></el-table-column>
-
-        <el-table-column align="right">
-          <template slot="header">
-            <div class="operation">
-              <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
-              <el-button size="mini" type="warning" round>增加记录</el-button>
-            </div>
-          </template>
-          <template slot-scope="scope">
-            <!-- <el-button size="mini" type="primary">编辑</el-button> -->
-            <el-button size="mini" type="info" @click="checkDetail(scope.$index, scope.row)">用户详情</el-button>
-            <!-- <el-button size="mini" type="success">查看订单</el-button> -->
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+  <div class="userManage">
+    <div class="operation"></div>
+    <el-table class="tagListTable" :data="tableData" height="800" border>
+      <el-table-column label="用户昵称" prop="nickName"></el-table-column>
+      <el-table-column label="账号" prop="email"></el-table-column>
+      <el-table-column label="用户余额" prop="balance"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <!-- <el-button size="mini" type="primary">编辑</el-button> -->
+          <el-button
+            size="mini"
+            type="info"
+            @click="checkDetail(scope.$index, scope.row)"
+            >用户详情</el-button
+          >
+          <!-- <el-button size="mini" type="success">查看订单</el-button> -->
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button
+      class="addBtn"
+      type="primary"
+      icon="el-icon-plus"
+      circle
+      @click="addBoxVisible = true"
+    ></el-button>
   </div>
 </template>
 <script>
@@ -91,16 +95,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content {
-  width: 100%;
-  // border: 1px solid blue;
-}
-.operation {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  button {
-    margin: 0 5px;
+.userManage {
+  padding: 20px;
+  .operation {
+    display: flex;
+  }
+  .tagListTable {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .addBtn {
+    position: fixed;
+    right: 100px;
+    bottom: 100px;
+    z-index: 2;
   }
 }
 </style>
